@@ -3,7 +3,11 @@
 set -eu
 
 # This app shares a Postgres database with other apps and keeps its tables in its own schema.
-php -r '$u = parse_url(getenv("DB_URL")); $db = new PDO("pgsql:host={$u["host"]};port=".($u["port"] ?? 5432).";dbname=".ltrim($u["path"], "/"), urldecode($u["user"]), urldecode($u["pass"])); $db->exec("CREATE SCHEMA IF NOT EXISTS ".getenv("DB_SEARCH_PATH"));'
+if [ -z "${DB_URL:-}" ]; then
+    echo "DB_URL is not set: add the database's Internal Database URL in the Render dashboard." >&2
+    exit 1
+fi
+php artisan tinker --execute='DB::statement("CREATE SCHEMA IF NOT EXISTS ".config("database.connections.pgsql.search_path"));'
 
 php artisan migrate --force
 
