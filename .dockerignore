@@ -1,0 +1,15 @@
+.env
+.env.*
+database/*.sqlite
+storage/app/private
+storage/logs
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
+vendor
+public/css/filament
+public/js/filament
+public/fonts/filament
+.git
+tests
+.phpunit.cache
